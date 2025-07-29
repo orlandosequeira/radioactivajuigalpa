@@ -1,11 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
-import { Header } from './components/Header';
-import { AudioPlayer } from './components/AudioPlayer';
-import { ImageSlider } from './components/ImageSlider';
-import { DailyVerse } from './components/DailyVerse';
-import { Footer } from './components/Footer';
-import { AdminPanel } from './components/AdminPanel';
-import { getContent, saveContent, AppContent } from './services/geminiService';
+import { Header } from './components/Header.tsx';
+import { AudioPlayer } from './components/AudioPlayer.tsx';
+import { ImageSlider } from './components/ImageSlider.tsx';
+import { DailyVerse } from './components/DailyVerse.tsx';
+import { Footer } from './components/Footer.tsx';
+import { AdminPanel } from './components/AdminPanel.tsx';
+import { getContent, saveContent, AppContent } from './services/geminiService.ts';
 
 function App() {
   const [logoUrl, setLogoUrl] = useState('');
@@ -37,7 +38,7 @@ function App() {
     }
   }, []);
 
-  const handleAdminSave = async (data: Omit<AppContent, 'articles'>) => {
+  const handleAdminSave = async (data: AppContent) => {
     try {
       await saveContent(data);
       setLogoUrl(data.logoUrl);
