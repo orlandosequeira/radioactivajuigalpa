@@ -1,18 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
-import { Header } from './components/Header';
-import { AudioPlayer } from './components/AudioPlayer';
-import { ImageSlider } from './components/ImageSlider';
-import { DailyVerse } from './components/DailyVerse';
-import { Footer } from './components/Footer';
-import { AdminPanel } from './components/AdminPanel';
-import { getContent, saveContent, AppContent } from './services/geminiService';
+import { Header } from './components/Header.tsx';
+import { AudioPlayer } from './components/AudioPlayer.tsx';
+import { ImageSlider } from './components/ImageSlider.tsx';
+import { DailyVerse } from './components/DailyVerse.tsx';
+import { Footer } from './components/Footer.tsx';
+import { getContent, AppContent } from './services/geminiService.ts';
 
 function App() {
   const [logoUrl, setLogoUrl] = useState('');
   const [slides, setSlides] = useState<AppContent['slides']>([]);
-  const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
-  const [showAdminButton, setShowAdminButton] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -31,29 +28,13 @@ function App() {
     loadContent();
   }, []);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('admin') === 'true') {
-      setShowAdminButton(true);
-    }
-  }, []);
-
-  const handleAdminSave = async (data: AppContent) => {
-    try {
-      await saveContent(data);
-      setLogoUrl(data.logoUrl);
-      setSlides(data.slides);
-      setIsAdminPanelOpen(false);
-    } catch (error) {
-      console.error("No se pudo guardar el contenido", error);
-      alert("Error: No se pudieron guardar los cambios. Por favor, inténtelo de nuevo.");
-    }
-  };
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <p className="text-xl text-yellow-400 animate-pulse">Cargando RADIOACTIVAJUIGALPA...</p>
+        <div className="text-center">
+            <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-xl text-yellow-400 animate-pulse">Cargando RADIOACTIVAJUIGALPA...</p>
+        </div>
       </div>
     );
   }
@@ -66,18 +47,7 @@ function App() {
         <ImageSlider slides={slides} />
         <DailyVerse />
       </main>
-      <Footer 
-        showAdminButton={showAdminButton} 
-        onAdminClick={() => setIsAdminPanelOpen(true)} 
-      />
-      {isAdminPanelOpen && (
-        <AdminPanel
-          logoUrl={logoUrl}
-          slides={slides}
-          onClose={() => setIsAdminPanelOpen(false)}
-          onSave={handleAdminSave}
-        />
-      )}
+      <Footer />
     </div>
   );
 }
